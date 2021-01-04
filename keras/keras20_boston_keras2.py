@@ -30,6 +30,7 @@ from tensorflow.keras.layers import Dense
 model = Sequential()
 model.add(Dense(356,activation='relu',input_dim=13))
 model.add(Dense(128,activation='relu'))
+model.add(Dense(128,activation='relu'))
 model.add(Dense(64,activation='relu'))
 model.add(Dense(64,activation='relu'))
 model.add(Dense(1))
@@ -37,10 +38,10 @@ model.add(Dense(1))
 #3 컴파일 훈련
 model.compile(loss='mse',optimizer='adam',metrics='mae')
 early_stoppoing = EarlyStopping(monitor='loss',patience=50,mode='auto')
-model.fit(x_train, y_train, epochs=1000, batch_size=8, validation_data=(x_val, y_val), verbose=1, callbacks=(early_stoppoing))
+model.fit(x_train, y_train, epochs=1000, batch_size=4, validation_data=(x_val, y_val), verbose=1, callbacks=(early_stoppoing))
 
 #4 평가 예측
-loss, mse = model.evaluate(x_test, y_test, batch_size=8)
+loss, mse = model.evaluate(x_test, y_test, batch_size=4)
 print('loss, mse : ',loss, mse)
 
 y_predict = model.predict(x_test)
@@ -50,3 +51,7 @@ print('RMSE : ', RMSE(y_test, y_predict ))
 
 r2 = r2_score(y_test, y_predict)
 print('R2: ', r2)
+
+# loss, mse :  11.002527236938477 2.3324036598205566
+# RMSE :  3.3170058471040815
+# R2:  0.8678277376002668

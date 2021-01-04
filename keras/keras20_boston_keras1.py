@@ -29,16 +29,17 @@ from tensorflow.keras.layers import Dense
 model = Sequential()
 model.add(Dense(356,activation='relu',input_dim=13))
 model.add(Dense(128,activation='relu'))
+model.add(Dense(128,activation='relu'))
 model.add(Dense(64,activation='relu'))
 model.add(Dense(64,activation='relu'))
 model.add(Dense(1))
 
 #3 컴파일 훈련
 model.compile(loss='mse',optimizer='adam',metrics='mae')
-model.fit(x_train, y_train, epochs=200, batch_size=8, validation_data=(x_val, y_val), verbose=1)
+model.fit(x_train, y_train, epochs=250, batch_size=4, validation_data=(x_val, y_val), verbose=1)
 
 #4 평가 예측
-loss, mse = model.evaluate(x_test, y_test, batch_size=8)
+loss, mse = model.evaluate(x_test, y_test, batch_size=4)
 print('loss, mse : ',loss, mse)
 
 y_predict = model.predict(x_test)
@@ -48,3 +49,7 @@ print('RMSE : ', RMSE(y_test, y_predict ))
 
 r2 = r2_score(y_test, y_predict)
 print('R2: ', r2)
+
+# loss, mse :  9.877310752868652 2.2219297885894775
+# RMSE :  3.1428189473448787
+# R2:  0.8813448547679702
