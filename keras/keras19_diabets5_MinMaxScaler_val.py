@@ -23,8 +23,6 @@ print(dataset.DESCR)
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random_state= 104, shuffle=True)
-
-from sklearn.model_selection import train_test_split
 x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, train_size=0.3, random_state= 104, shuffle=True)
 
 from sklearn.preprocessing import MinMaxScaler
