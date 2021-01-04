@@ -32,15 +32,15 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
 model = Sequential()
-model.add(Dense(120, input_dim=10))
-model.add(Dense(120))
-model.add(Dense(120))
-model.add(Dense(80))
-model.add(Dense(80))
-model.add(Dense(80))
-model.add(Dense(60))
-model.add(Dense(60))
-model.add(Dense(60))
+model.add(Dense(356, input_dim=10))
+model.add(Dense(128))
+model.add(Dense(128))
+model.add(Dense(64))
+model.add(Dense(64))
+model.add(Dense(32))
+model.add(Dense(32))
+model.add(Dense(16))
+model.add(Dense(16))
 model.add(Dense(1))
 
 #3
@@ -65,31 +65,31 @@ r2 = r2_score(y_test, y_predict)
 print('R2: ', r2)
 
 # 기본
-# loss,mae :  1038.3603515625 18.367414474487305
-# RMSE :  32.223597019036255
-# R2:  0.8205333476009842
+# loss,mae :  2696.805419921875 43.70464324951172
+# RMSE :  51.93077936188863
+# R2:  0.549811921815972
 
 # x통짜
-# loss,mae :  2768.078125 42.41880416870117
-# RMSE :  52.612524966998045
-# R2:  0.5215748340033284
+# loss,mae :  2693.2861328125 43.16354751586914
+# RMSE :  51.8968816499351
+# R2:  0.5503994487280122
 
 # 민 맥스 스케일러 x 전체를 다
-# loss,mae :  817.8695068359375 11.969538688659668
-# RMSE :  28.598421271010697
-# R2:  0.8586421779955937
+# loss,mae :  2814.070556640625 43.658714294433594
+# RMSE :  53.047809880009815
+# R2:  0.5302365472968072
 
 # x_train 
-# loss,mae :  802.31591796875 14.623322486877441
-# RMSE :  28.325182180985834
-# R2:  0.861330435961635
+# loss,mae :  2455.87841796875 41.00312042236328
+# RMSE :  49.55682010723396
+# R2:  0.5755343121533955
 
 # x_val
-# loss,mae :  36.10376739501953 5.0196919441223145
-# RMSE :  6.008641561271572
-# R2:  0.9937599463818423
+# loss,mae :  2741.06005859375 43.16392135620117
+# RMSE :  52.35513191123292
+# R2:  0.5262445240526807
 
-# EalyStopping
-# loss,mae :  39.08313751220703 4.688662528991699
-# RMSE :  6.251651878049788
-# R2:  0.993245000839675
+# EarlyStopping
+# loss,mae :  2588.884033203125 41.36106872558594
+# RMSE :  50.88107541628464
+# R2:  0.5525461075624303
