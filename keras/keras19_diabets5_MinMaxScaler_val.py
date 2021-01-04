@@ -27,6 +27,13 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random
 from sklearn.model_selection import train_test_split
 x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, train_size=0.3, random_state= 104, shuffle=True)
 
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+x_val = scaler.transform(x_val)
+
 #2 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -83,6 +90,6 @@ print('R2: ', r2)
 # R2:  0.5755343121533955
 
 # x_val
-# loss,mae :  2741.06005859375 43.16392135620117
-# RMSE :  52.35513191123292
-# R2:  0.5262445240526807
+# loss,mae :  2761.839111328125 43.19102096557617
+# RMSE :  52.55319959432148
+# R2:  0.5226531608553822
