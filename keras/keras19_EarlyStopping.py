@@ -18,6 +18,7 @@ print(np.max(x), np.min(y))
 print(dataset.feature_names)
 print(dataset.DESCR)
 
+
 # x = x/442
 
 from sklearn.model_selection import train_test_split
@@ -26,35 +27,29 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random
 from sklearn.model_selection import train_test_split
 x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, train_size=0.8, random_state= 104, shuffle=True)
 
-
-from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler()
-scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test)
-x_val = scaler.transform(x_val)
-
-#2 모델 구성
+#2 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
 model = Sequential()
-model.add(Dense(120, input_dim=10, activation='relu'))
+model.add(Dense(120, input_dim=10))
+model.add(Dense(120))
+model.add(Dense(120))
+model.add(Dense(80))
+model.add(Dense(80))
 model.add(Dense(80))
 model.add(Dense(60))
 model.add(Dense(60))
 model.add(Dense(60))
 model.add(Dense(1))
 
-#3 컴파일 훈련
+#3
 model.compile(loss='mse', optimizer='adam', metrics=['mae'])
-
 from tensorflow.keras.callbacks import EarlyStopping
-early_stopping = EarlyStopping(monitor='loss', patience=50, mode='auto')
+early_stopping = EarlyStopping(monitor='loss', patience=100, mode='auto')
+model.fit(x_train, y_train, epochs=1000, batch_size=6, callbacks=[early_stopping],validation_data=(x_val, y_val), verbose=1)
 
-model.fit(x_test, y_test, epochs=1000, batch_size=6, callbacks=[early_stopping], validation_data=(x_val,y_val), verbose=1)
-
-#4 평가 예측
+#4
 loss, mae = model.evaluate(x_test, y_test, batch_size=6)
 print('loss,mae : ', loss, mae)
 

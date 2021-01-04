@@ -17,21 +17,24 @@ y = dataset.target
 # print(dataset.feature_names)
 # print(dataset.DESCR)
 
-# x = x/442
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler()
 scaler.fit(x)
 x = scaler.transform(x)
 
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random_state= 104, shuffle=True)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state= 104, shuffle=True)
 
 #2 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
 model = Sequential()
-model.add(Dense(120, input_dim=10, activation='relu'))
+model.add(Dense(120, input_dim=10))
+model.add(Dense(120))
+model.add(Dense(120))
+model.add(Dense(80))
+model.add(Dense(80))
 model.add(Dense(80))
 model.add(Dense(60))
 model.add(Dense(60))
@@ -40,7 +43,7 @@ model.add(Dense(1))
 
 #3
 model.compile(loss='mse', optimizer='adam', metrics=['mae'])
-model.fit(x_test, y_test, epochs=1000, batch_size=6, validation_split=0.2, verbose=1)
+model.fit(x_train, y_train, epochs=1000, batch_size=6, validation_split=0.2, verbose=1)
 
 #4
 loss, mae = model.evaluate(x_test, y_test, batch_size=6)
@@ -58,16 +61,16 @@ r2 = r2_score(y_test, y_predict)
 print('R2: ', r2)
 
 # 기본
-# loss,mae :  1038.3603515625 18.367414474487305
-# RMSE :  32.223597019036255
-# R2:  0.8205333476009842
+# loss,mae :  2696.805419921875 43.70464324951172
+# RMSE :  51.93077936188863
+# R2:  0.549811921815972
 
 # x통짜
-# loss,mae :  2768.078125 42.41880416870117
-# RMSE :  52.612524966998045
-# R2:  0.5215748340033284
+# loss,mae :  2693.2861328125 43.16354751586914
+# RMSE :  51.8968816499351
+# R2:  0.5503994487280122
 
 # 민 맥스 스케일러 x 전체를 다
-# loss,mae :  817.8695068359375 11.969538688659668
-# RMSE :  28.598421271010697
-# R2:  0.8586421779955937
+# loss,mae :  2814.070556640625 43.658714294433594
+# RMSE :  53.047809880009815
+# R2:  0.5302365472968072

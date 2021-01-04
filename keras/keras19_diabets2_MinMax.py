@@ -8,25 +8,30 @@ dataset = load_diabetes()
 x = dataset.data
 y = dataset.target
 
-# print(x[:5])
-# print(y[:10])
-# print(x.shape)
-# print(y.shape)
+print(x[:5])
+print(y[:10])
+print(x.shape)
+print(y.shape)
 
-# print(np.max(x), np.min(y))
-# print(dataset.feature_names)
-# print(dataset.DESCR)
-x = x/442
+print(np.max(x), np.min(y))
+print(dataset.feature_names)
+print(dataset.DESCR)
+
+x = x/0.198787989657293
 
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random_state= 104, shuffle=True)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state= 104, shuffle=True)
 
 #2 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
 model = Sequential()
-model.add(Dense(120, input_dim=10, activation='relu'))
+model.add(Dense(120, input_dim=10))
+model.add(Dense(120))
+model.add(Dense(120))
+model.add(Dense(80))
+model.add(Dense(80))
 model.add(Dense(80))
 model.add(Dense(60))
 model.add(Dense(60))
@@ -35,7 +40,7 @@ model.add(Dense(1))
 
 #3
 model.compile(loss='mse', optimizer='adam', metrics=['mae'])
-model.fit(x_test, y_test, epochs=1000, batch_size=6, validation_split=0.2, verbose=1)
+model.fit(x_train, y_train, epochs=1000, batch_size=6, validation_split=0.2, verbose=1)
 
 #4
 loss, mae = model.evaluate(x_test, y_test, batch_size=6)
@@ -53,11 +58,11 @@ r2 = r2_score(y_test, y_predict)
 print('R2: ', r2)
 
 # 기본
-# loss,mae :  852.134521484375 14.923951148986816
-# RMSE :  29.191344245671544
-# R2:  0.852719952527542
+# loss,mae :  2696.805419921875 43.70464324951172
+# RMSE :  51.93077936188863
+# R2:  0.549811921815972
 
 # x통짜
-# loss,mae :  2279.138916015625 38.92597198486328
-# RMSE :  47.740324011803246
-# R2:  0.6060814333640349
+# loss,mae :  2693.2861328125 43.16354751586914
+# RMSE :  51.8968816499351
+# R2:  0.5503994487280122
