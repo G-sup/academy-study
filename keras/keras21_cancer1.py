@@ -73,6 +73,11 @@ print(y_test[-5:-1])
 # y_pred = np.argmax(y_pred,axis=1)
 # print(y_pred)
 
-y_pred = model.predict_classes(x_test[-5:-1])
+# y_pred = model.predict_classes(x_test[-5:-1])
+# y_pred = np.transpose(y_pred)
+# print(y_pred)
+
+y_pred = np.where(y_pred>0.5, 1, y_pred)
+y_pred = np.where(y_pred<0.5, 0, y_pred)
 y_pred = np.transpose(y_pred)
 print(y_pred)
