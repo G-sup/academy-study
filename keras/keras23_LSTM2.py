@@ -20,7 +20,6 @@ model = Sequential()
 
 # model.add(LSTM(10, activation='relu', input_shape=(3,1)))  
 model.add(LSTM(10, activation='relu', input_length=3, input_dim=1))
-
 # LSTM 에서는 input_shape가 2차원으로 들어간다 ( 열(3), 몇개씩 자르는지(1)) 
 model.add(Dense(20))
 model.add(Dense(20))
