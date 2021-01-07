@@ -1,3 +1,5 @@
+# 다 : 다 mlp
+
 import numpy as np
 #1 데이터
 x = np.array([range(100),range(301,401),range(1,101)])

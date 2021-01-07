@@ -5,9 +5,8 @@
 # 5.epochs :30이상
 
 #레이어를 엄청(80개정도) 늘린다
-#
-
 import numpy as np
+
 #1 데이터
 x = np.array([range(100),range(301,401),range(1,101),range(501,601),range(801,901)])
 y = np.array([range(711, 811), range(1,101)])
