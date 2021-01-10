@@ -55,10 +55,10 @@ model.add(Dense(64))
 model.add(Dense(64))
 model.add(Dense(34))
 model.add(Dense(34))
-model.add(Dense(1,activation='softmax'))
+model.add(Dense(10,activation='softmax'))
 
 #3
-model.compile(loss='categorical_clossentropy',optimizer='adam',metrics=['acc'])
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
 model.fit(x_train,y_train,epochs=10,batch_size=32,validation_split=0.2,verbose=1)
 
 #4
@@ -67,8 +67,10 @@ print(loss)
 
 
 y_pred = model.predict(x_test)
+
+y_pred = np.argmax(y_pred,axis=-1)
+y_test = np.argmax(y_test,axis=-1)
+
 print(y_pred)
 print(y_test)
 
-print(y_pred[:10])
-print(y_test[:10])
