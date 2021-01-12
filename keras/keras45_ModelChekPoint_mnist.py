@@ -65,7 +65,7 @@ model.summary()
 #3
 
 from tensorflow.keras.callbacks import ModelCheckpoint # callbacks 안에 넣어준다
-modelpath = './modelCheckPoint/k45_mnist_{epoch:02d}-{val_loss:.4f}.hdf5' # 파일명 : 모델명 에포-발리데이션
+modelpath = '../Data/modelCheckPoint/k45_mnist_{epoch:02d}-{val_loss:.4f}.hdf5' # 파일명 : 모델명 에포-발리데이션
 mc = ModelCheckpoint(filepath=modelpath,monitor='val_loss',save_best_only=True,mode='auto')
 # filepath 그지점에 W 값이 들어간다
 
@@ -106,21 +106,27 @@ plt.grid() # 모눈종이형 격자 = grid
 plt.title('mnist_loss n val_loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
-plt.legend(loc='upper right') #
+plt.legend(loc='upper right') 
+# loc = 로케이션 , 라벨의 이름을 표기, 위치가 없을때는 빈공간에 자리한다 
 
 # ================
 
 plt.subplot(2,1,2) # (2,1) 짜리 2번째 그림 shbplt = 여러장을 보려할떄
 
-plt.plot(hist.history['acc'],marker='.',c='red',label='acc')
-plt.plot(hist.history['val_acc'],marker='.',c='blue',label='val_acc')
+plt.plot(hist.history['acc'],marker='.',c='red')
+plt.plot(hist.history['val_acc'],marker='.',c='blue')
+
+# plt.plot(hist.history['acc'],marker='.',c='red', label='acc')
+# plt.plot(hist.history['val_acc'],marker='.',c='blue', label='val_acc')
 
 plt.grid() 
 
 plt.title('mnist_acc n val_acc')
 plt.ylabel('acc')
 plt.xlabel('epoch')
-plt.legend(loc='upper right') 
+plt.legend(['acc','val_acc']) # 딕셔너리로 바로 사용가능
+
+# plt.legend(loc='upper right') 
 
 plt.show()
 

@@ -51,7 +51,7 @@ model.add(Dense(1))
 
 #3
 from tensorflow.keras.callbacks import ModelCheckpoint ,EarlyStopping# callbacks 안에 넣어준다
-modelpath = './modelCheckPoint/k46_MC_5_{epoch:02d}-{val_loss:.4f}.hdf5' # 파일명 : 모델명 에포-발리데이션
+modelpath = '../Data/modelCheckPoint/k46_MC_5_{epoch:02d}-{val_loss:.4f}.hdf5' # 파일명 : 모델명 에포-발리데이션
 mc = ModelCheckpoint(filepath=modelpath,monitor='val_loss',save_best_only=True,mode='auto')
 early_stopping = EarlyStopping(monitor='val_loss',patience=30,mode='auto')
 

@@ -65,7 +65,7 @@ model = Model(inputs = input1, outputs = output1)
 
 #3 컴파일 훈련
 from tensorflow.keras.callbacks import ModelCheckpoint , EarlyStopping # callbacks 안에 넣어준다
-modelpath = './modelCheckPoint/k46_MC_4_{epoch:02d}-{val_loss:.4f}.hdf5' # 파일명 : 모델명 에포-발리데이션
+modelpath = '../Data/modelCheckPoint/k46_MC_4_{epoch:02d}-{val_loss:.4f}.hdf5' # 파일명 : 모델명 에포-발리데이션
 mc = ModelCheckpoint(filepath=modelpath,monitor='val_loss',save_best_only=True,mode='auto')
 
 model.compile(loss='mse', optimizer='adam', metrics=['mae'])

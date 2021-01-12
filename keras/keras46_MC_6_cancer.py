@@ -50,7 +50,7 @@ model.add(Dense(1, activation='sigmoid'))
 # model.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy']) 
 # : mse=mean_squared_error, acc=accuracy 같이 풀네임 사용가능
 from tensorflow.keras.callbacks import ModelCheckpoint # callbacks 안에 넣어준다
-modelpath = './modelCheckPoint/k46_MC_6_{epoch:02d}-{val_loss:.4f}.hdf5' # 파일명 : 모델명 에포-발리데이션
+modelpath = '../Data/modelCheckPoint/k46_MC_6_{epoch:02d}-{val_loss:.4f}.hdf5' # 파일명 : 모델명 에포-발리데이션
 mc = ModelCheckpoint(filepath=modelpath,monitor='val_loss',save_best_only=True,mode='auto')
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])

@@ -66,7 +66,7 @@ model.summary()
 
 from tensorflow.keras.callbacks import ModelCheckpoint , TensorBoard # callbacks 안에 넣어준다
 
-tb = TensorBoard(log_dir='./graph', histogram_freq=0,write_graph=True,write_images=True) 
+tb = TensorBoard(log_dir='../Data/graph', histogram_freq=0,write_graph=True,write_images=True) 
 
 '''
  cmd 
@@ -80,7 +80,7 @@ tb = TensorBoard(log_dir='./graph', histogram_freq=0,write_graph=True,write_imag
 
 '''
 
-modelpath = './modelCheckPoint/k45_mnist_{epoch:02d}-{val_loss:.4f}.hdf5'
+modelpath = '../Data/modelCheckPoint/k45_mnist_{epoch:02d}-{val_loss:.4f}.hdf5'
 mc = ModelCheckpoint(filepath=modelpath,monitor='val_loss',save_best_only=True,mode='auto')
 model.compile(loss='categorical_crossentropy',optimizer='adam',metrics='acc')
 early_stopping = EarlyStopping(monitor='val_loss',patience=5,mode='auto')

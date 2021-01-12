@@ -71,7 +71,7 @@ model.add(Dense(3,activation='softmax'))
 
 #3 컴파일 훈현
 from tensorflow.keras.callbacks import ModelCheckpoint # callbacks 안에 넣어준다
-modelpath = './modelCheckPoint/k46_MC_7_{epoch:02d}-{val_loss:.4f}.hdf5' # 파일명 : 모델명 에포-발리데이션
+modelpath = '../Data/modelCheckPoint/k46_MC_7_{epoch:02d}-{val_loss:.4f}.hdf5' # 파일명 : 모델명 에포-발리데이션
 mc = ModelCheckpoint(filepath=modelpath,monitor='val_loss',save_best_only=True,mode='auto')
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
