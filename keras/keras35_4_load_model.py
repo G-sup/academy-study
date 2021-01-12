@@ -24,7 +24,7 @@ x = x.reshape(6, 4, 1)
 
 #2
 
-model = load_model('./model/save_keras35.h5')
+model = load_model('../Data/h5/save_keras35.h5')
 # model.add(Dense(5)) = 이름 : dense
 # model.add(Dense(1)) = 이름 : dense_1
 # model.summary()

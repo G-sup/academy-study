@@ -26,7 +26,7 @@ print(x.shape)
 
 #2
 
-model = load_model('./model/save_keras35.h5')
+model = load_model('../Data/h5/save_keras35.h5')
 model.add(Dense(32, name='yaho'))
 model.add(Dense(1, name="yaho2"))
 
