@@ -3,7 +3,7 @@ from numpy.core.fromnumeric import size
 import pandas as pd
 from tensorflow.keras import datasets
 from tensorflow.keras.layers import Dropout,Dense,GRU
-from tensorflow.keras.models import Sequential,load_model
+from tensorflow.keras.models import Sequential
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
@@ -113,7 +113,7 @@ x_test = x_test.reshape(-1, 6,6)
 x_val = x_val.reshape(-1, 6,6)
 x_pred = x_pred.reshape(1, 6,6)
 
-
+np.save('./samsung/s1.npy',arr=([x,y,x_pred,x_train,x_test,x_val,y_train,y_test,y_val]))
 
 #2
 model= Sequential()
@@ -137,16 +137,17 @@ model.add(Dense(1))
 model.summary()
 
 #3
-modelpath = '../data/modelCheckPoint/samsung_split_test_{epoch:02d}-{val_loss:.4f}.hdf5'
+modelpath = '../data/modelCheckPoint/samsung_test_1_{epoch:02d}-{val_loss:.7f}.hdf5'
 mc = ModelCheckpoint(filepath=modelpath,monitor='val_loss',save_best_only=True,mode='auto')
-early_stopping = EarlyStopping(monitor='val_loss',patience=50,mode='auto')
+early_stopping = EarlyStopping(monitor='val_loss',patience=70,mode='auto')
 model.compile(loss='mse',optimizer='adam',metrics='mae')
-model.fit(x_train,y_train,epochs=1,batch_size=16,validation_split=0.2,verbose=1,callbacks=[early_stopping,mc])
+model.fit(x_train,y_train,epochs=1000,batch_size=16,validation_data=(x_val,y_val),verbose=1,callbacks=[early_stopping,mc])
 
 
 #4
 loss = model.evaluate(x_test,y_test,batch_size=16)
 print(loss)
+
 
 y_pred = model.predict(x_pred)
 print(y_pred)

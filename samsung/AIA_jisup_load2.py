@@ -20,7 +20,7 @@ y_test = np.load('./samsung/s2.npy',allow_pickle=True)[7]
 y_val = np.load('./samsung/s2.npy',allow_pickle=True)[8]
 
 #3
-model = load_model('../data/modelCheckPoint/samsung_test_103-306237.0625000.hdf5')
+model = load_model('../data/modelCheckPoint/samsung_test_3_01-2635745024.0000000.hdf5')
 
 result = model.evaluate(x_test,y_test)
 print('로드 체크 포인트_loss : ',result[0])
