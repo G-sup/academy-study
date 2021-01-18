@@ -199,14 +199,16 @@ dense1 = GRU(512, activation='relu')(input1)
 dense1 = Dropout(0.4)(dense1)
 dense1 = Dense(1024, activation='relu')(dense1)
 dense1 = Dropout(0.4)(dense1)
-
+dense1 = Dense(512, activation='relu')(dense1)
+dense1 = Dropout(0.4)(dense1)
 
 input2 = Input(shape=(6,6))
 dense2 = GRU(512, activation='relu')(input2)
 dense2 = Dropout(0.4)(dense2)
 dense2 = Dense(1024, activation='relu')(dense2)
 dense2 = Dropout(0.4)(dense2)
-
+dense2 = Dense(512, activation='relu')(dense2)
+dense2 = Dropout(0.4)(dense2)
 
 merge1 = concatenate([dense1, dense2])
 middlel1 = Dense(512,activation='relu')(merge1)

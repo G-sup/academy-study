@@ -30,15 +30,7 @@ xk_test = np.load('./samsung/e-k1.npy',allow_pickle=True)[3]
 xk_val = np.load('./samsung/e-k1.npy',allow_pickle=True)[4]
 
 
-model = load_model('../data/modelCheckPoint/samsung_test_3_253-3302845.25000000.hdf5')
-
-#3
-# modelpath = '../data/modelCheckPoint/samsung_test_3_{epoch:02d}-{val_loss:.7f}.hdf5'
-# mc = ModelCheckpoint(filepath=modelpath,monitor='val_loss',save_best_only=True,mode='auto')
-early_stopping = EarlyStopping(monitor='val_loss',patience=70,mode='auto')
-model.compile(loss='mse',optimizer='adam',metrics='mae')
-model.fit([x_train,xk_train],y_train,epochs=1,batch_size=8,validation_data=([x_val,xk_val],y_val),verbose=1,callbacks=[early_stopping])#,mc])
-
+model = load_model('../data/modelCheckPoint/samsung_test_3_213-3578546.50000000.hdf5')
 
 #4
 loss = model.evaluate([x_test,xk_test],y_test,batch_size=8)
