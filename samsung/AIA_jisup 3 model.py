@@ -221,11 +221,14 @@ model = Model(inputs=[input1, input2], outputs=output1)
 model.summary()
 
 #3
+from tensorflow.keras.callbacks import ReduceLROnPlateau # callbacks 안에 넣어준다
+reduce_lr = ReduceLROnPlateau(monitor='val_loss',patience=35,factor=0.5,verbose=1) # factor = 0.5 : RL를 50%로 줄이겠다
+
 modelpath = '../data/modelCheckPoint/samsung_test_3_{epoch:02d}-{val_loss:.8f}.hdf5'
 mc = ModelCheckpoint(filepath=modelpath,monitor='val_loss',save_best_only=True,mode='auto')
 early_stopping = EarlyStopping(monitor='val_loss',patience=70,mode='auto')
 model.compile(loss='mse',optimizer='adam',metrics='mae')
-model.fit([x_train,xk_train],y_train,epochs=1000,batch_size=8,validation_data=([x_val,xk_val],y_val),verbose=1,callbacks=[early_stopping,mc])
+model.fit([x_train,xk_train],y_train,epochs=1000,batch_size=8,validation_data=([x_val,xk_val],y_val),verbose=1,callbacks=[early_stopping,mc,reduce_lr])
 
 
 #4
