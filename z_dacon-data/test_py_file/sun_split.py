@@ -33,20 +33,20 @@ def split_x(D,x_row,y_cols):
     x , y = [] , []
     for i in range(len(D)):
         x_end_number = i + x_row
-        y_end_number = x_end_number + y_cols+44
+        y_end_number = x_end_number + y_cols+48
         if y_end_number > len(D) :
             break
         tem_x = D[i : x_end_number,:]
-        tem_y = D[x_end_number+44:y_end_number, :] # 뒤 숫자에 따라 y가 변한다
+        tem_y = D[x_end_number+48:y_end_number, -1] # 뒤 숫자에 따라 y가 변한다
         x.append(tem_x)
         y.append(tem_y)
     return np.array(x),np.array(y)
     
-x, y = split_x(df,5,1)
+x, y = split_x(df,5,2)
 
-print(x[48])
+print(x[63])
 print('=========================================')
-print(y)
+print(y[15])
 
 '''
 x_train, x_test, y_train, y_test = train_test_split(x,y, train_size = 0.8, random_state=104)

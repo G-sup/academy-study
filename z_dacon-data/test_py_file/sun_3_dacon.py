@@ -3,7 +3,7 @@ from numpy.core.fromnumeric import size
 import pandas as pd
 from tensorflow.keras import datasets
 from tensorflow.keras import callbacks
-from tensorflow.keras.layers import Dropout,Dense,GRU,Input
+from tensorflow.keras.layers import Dropout,Dense,GRU,Input,Conv1D ,Flatten ,MaxPool1D
 from tensorflow.keras.models import Sequential,Model
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from sklearn.preprocessing import MinMaxScaler
@@ -15,13 +15,13 @@ from tensorflow.python.keras import activations
 from tensorflow.python.keras.callbacks import ReduceLROnPlateau
 
 # 1
-train = pd.read_csv('./z_dacon-data/train/train.csv', index_col=[0,2], header=0) 
+train = pd.read_csv('./z_dacon-data/train/train.csv', index_col=[0,1,2], header=0) 
 
 
 def preprocess_data(data, is_train=True):
     
     temp = data.copy()
-    temp = temp[['Hour', 'TARGET', 'DHI', 'DNI', 'WS', 'RH', 'T']]
+    temp = temp[[ 'TARGET', 'DHI', 'DNI', 'RH', 'T']]
 
     if is_train==True:          
     
@@ -33,17 +33,17 @@ def preprocess_data(data, is_train=True):
 
     elif is_train==False:
         
-        temp = temp[['Hour', 'TARGET', 'DHI', 'DNI', 'WS', 'RH', 'T']]
+        temp = temp[[ 'TARGET', 'DHI', 'DNI', 'RH', 'T']]
                               
         return temp.iloc[-48:, :]
 
 
 df_train = preprocess_data(train)
-df_train.iloc[:48]
+print(df_train.iloc[:48])
 
-train.iloc[48:96]
-train.iloc[48+48:96+48]
-print(df_train.tail())
+# train.iloc[48:96]
+# train.iloc[48+48:96+48]
+# print(df_train.tail())
 
 df_test = []
 
@@ -53,11 +53,10 @@ for i in range(81):
     temp = preprocess_data(temp, is_train=False)
     df_test.append(temp)
 
-x_pred = pd.concat(df_test).values
+x_pred = pd.concat(df_test)
 print(x_pred.shape)
-x_pred = x_pred[-48:,:]
 
-print(x_pred)
+
 
 
 
@@ -69,6 +68,7 @@ print(x_train.shape)
 print(y1_train.shape)
 print(y2_train.shape)
 
+quantiles = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
 
 
