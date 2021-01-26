@@ -9,7 +9,7 @@ from tensorflow.keras import callbacks
 from tensorflow.keras.layers import Dropout,Dense,GRU,Input,Conv1D ,Flatten ,MaxPool1D,Conv2D,MaxPooling2D
 from tensorflow.keras.models import Sequential,Model,load_model
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
@@ -64,6 +64,29 @@ print(y_train2)
 print(x_pred)
 
 
+x_train = x_train.values
+x_test = x_test.values
+y_train1 = y_train1.values
+y_train2 = y_train2.values
+y_test1 = y_test1.values
+y_test2 = y_test2.values
+
+scaler = StandardScaler()
+
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+x_pred = scaler.transform(x_pred)
+
+print(x_train.shape) 
+print(x_test.shape)
+
+# x = x.T.reshape(-1, 4, 5)
+x_train = x_train.reshape(-1, 7, 1)
+x_test = x_test.reshape(-1, 7, 1)
+x_pred = x_pred.reshape(-1, 7 ,1)
+
+
 from tensorflow.keras.backend import mean, maximum
 
 qunatile_list=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
@@ -72,24 +95,25 @@ def quantile_loss(q, y, pred):
     err=(y-pred)
     return K.mean(K.maximum(q*err, (q-1)*err), axis=-1)
 
+
 for q in qunatile_list:
     model=Sequential()
-    model.add(Dense(256,activation='relu', input_shape = (7,)))
+    model.add(GRU(64,activation='relu',return_sequences=True, input_shape = (7,1)))
     model.add(Dropout(0.2))
-    model.add(Dense(256,activation='relu'))
+    model.add(GRU(64, activation='relu'))
     model.add(Dropout(0.2))
-    model.add(Dense(256,activation='relu'))
+    model.add(Dense(256))
     model.add(Dropout(0.2))
-    model.add(Dense(128,activation='relu'))
-    model.add(Dense(64,activation='relu'))
+    model.add(Dense(128))
+    model.add(Dense(64))
     model.add(Dense(1))
 
-    es=EarlyStopping(monitor='val_loss', mode='auto', patience=60)
-    rl=ReduceLROnPlateau(monitor='val_loss', mode='auto', patience=30, factor=0.5)
+    es=EarlyStopping(monitor='val_loss', mode='auto', patience=70)
+    rl=ReduceLROnPlateau(monitor='val_loss', mode='auto', patience=35, factor=0.5)
     cp=ModelCheckpoint(monitor='val_loss', mode='auto', save_best_only=True,
                     filepath='./z_dacon-data/modelcheckpoint/dacon_day_2_{epoch:02d}-{val_loss:.4f}.hdf5')
     model.compile(loss=lambda x_train, y_train:quantile_loss(q, x_train, y_train), optimizer='adam')
-    hist=model.fit(x_train, y_train1 ,validation_split=0.2,epochs=1000, batch_size=16, callbacks=[es, rl])
+    hist=model.fit(x_train, y_train1 ,validation_split=0.2,epochs=1000, batch_size=64, callbacks=[es, rl])
     loss=model.evaluate(x_test,y_test1)
     pred=model.predict(x_pred)
     pred = np.where(pred < 0.4, 0, pred)
@@ -101,22 +125,22 @@ for q in qunatile_list:
 
 for q in qunatile_list:
     model=Sequential()
-    model.add(Dense(256,activation='relu', input_shape = (7,)))
+    model.add(GRU(64,activation='relu',return_sequences=True, input_shape = (7,1)))
     model.add(Dropout(0.2))
-    model.add(Dense(256,activation='relu'))
+    model.add(GRU(64, activation='relu'))
     model.add(Dropout(0.2))
-    model.add(Dense(256,activation='relu'))
+    model.add(Dense(256))
     model.add(Dropout(0.2))
-    model.add(Dense(128,activation='relu'))
-    model.add(Dense(64,activation='relu'))
+    model.add(Dense(128))
+    model.add(Dense(64))
     model.add(Dense(1))
 
-    es=EarlyStopping(monitor='val_loss', mode='auto', patience=60)
-    rl=ReduceLROnPlateau(monitor='val_loss', mode='auto', patience=30, factor=0.5)
+    es=EarlyStopping(monitor='val_loss', mode='auto', patience=70)
+    rl=ReduceLROnPlateau(monitor='val_loss', mode='auto', patience=35, factor=0.5)
     cp=ModelCheckpoint(monitor='val_loss', mode='auto', save_best_only=True,
                     filepath='./z_dacon-data/modelcheckpoint/dacon_day_2_{epoch:02d}-{val_loss:.4f}.hdf5')
     model.compile(loss=lambda x_train, y_train:quantile_loss(q, x_train, y_train), optimizer='adam')
-    hist=model.fit(x_train, y_train2 ,validation_split=0.2,epochs=1000, batch_size=16, callbacks=[es, rl])
+    hist=model.fit(x_train, y_train2 ,validation_split=0.2,epochs=1000, batch_size=64, callbacks=[es, rl])
     loss=model.evaluate(x_test, y_test2)
     pred=model.predict(x_pred)
     pred = np.where(pred < 0.4, 0, pred)
@@ -125,6 +149,7 @@ for q in qunatile_list:
 
     file_path='./z_dacon-data/test_test/quantile_all_8day_loss_' + str(q) + '.csv'
     y_pred.to_csv(file_path)
+
 
 
 
