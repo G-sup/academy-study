@@ -16,7 +16,7 @@ from tensorflow.python.keras.callbacks import ReduceLROnPlateau
 import tensorflow.keras.backend as K
 df_test = []
 
-file_path = './z_dacon-data/test_test/quantile_all_loss_0.1.csv' 
+file_path = './dacon-data/test_test/quantile_all_loss_0.1.csv' 
 df2 = pd.read_csv(file_path, index_col=[0], header=0)
 
 
@@ -38,7 +38,7 @@ print(df2)
 
 
 for i in range(0,81):
-    file_path = './z_dacon-data/test_test/quantile_all_loss_0.9.csv' 
+    file_path = './dacon-data/test_test/quantile_all_loss_0.9.csv' 
     df2 = pd.read_csv(file_path, index_col=[0], header=0) 
     df = df2.dropna(axis=0).values
     df3 = df[96*(i-1):96*i,0]
@@ -62,4 +62,4 @@ print(X_test.shape)
 x_pred = pd.DataFrame(X_test)
 # # x_pred = pd.DataFrame({'day7': X_test[:, 0],'day8': X_test[:, 1]})
 
-x_pred.to_csv('./z_dacon-data/quantile_loss/quantile_0.9_all.csv', sep=',') 
+x_pred.to_csv('./dacon-data/quantile_loss/quantile_0.9_all.csv', sep=',') 

@@ -15,7 +15,7 @@ from tensorflow.python.keras import activations
 from tensorflow.python.keras.callbacks import ReduceLROnPlateau
 import tensorflow.keras.backend as K
 
-df = pd.read_csv('./train/train.csv', index_col=[0,1,2], header=0) 
+df = pd.read_csv('./dacondata/train/train.csv', index_col=[0,1,2], header=0) 
 
 df = df[['DHI','DNI','RH','T','TARGET']]
 

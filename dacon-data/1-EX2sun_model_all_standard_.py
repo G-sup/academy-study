@@ -6,7 +6,7 @@ from tensorflow.keras import callbacks
 from tensorflow.keras.layers import Dropout,Dense,GRU,Input,Conv1D ,Flatten ,MaxPool1D
 from tensorflow.keras.models import Sequential,Model,load_model
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler,StandardScaler
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
@@ -14,8 +14,9 @@ import seaborn as sns
 from tensorflow.python.keras import activations
 from tensorflow.python.keras.callbacks import ReduceLROnPlateau
 import tensorflow.keras.backend as K
+
 # 1
-df = pd.read_csv('./z_dacon-data/train/train.csv', index_col=[0,1,2], header=0) 
+df = pd.read_csv('./dacon-data/train/train.csv', index_col=[0,1,2], header=0) 
 
 df = df[['DHI','DNI','RH','T','TARGET']]
 
@@ -76,7 +77,7 @@ print(x.shape)
 # print(y.shape)
 y = y1
 
-df2 = pd.read_csv('./z_dacon-data/x_pred_all.csv', header=0) 
+df2 = pd.read_csv('./dacon-data/x_pred_all.csv', header=0) 
 df2 = df2[['DHI','DNI','RH','T','TARGET']]
 
 df2 = df2.dropna(axis=0).values
@@ -117,32 +118,32 @@ print(x_pred.shape)
 x_train, x_test, y_train, y_test = train_test_split(x,y, train_size = 0.8, random_state=104)
 x_train, x_val, y_train, y_val = train_test_split(x_train,y_train,train_size = 0.8, random_state=104)
 
-x = x.reshape(-1, 20)
-x_train = x_train.reshape(-1, 20)
-x_test = x_test.reshape(-1, 20)
-x_val = x_val.reshape(-1,20)
-x_pred = x_pred.reshape(-1,20)
+x = x.reshape(-1, 1)
+x_train = x_train.reshape(-1, 1)
+x_test = x_test.reshape(-1, 1)
+x_val = x_val.reshape(-1,1)
+x_pred = x_pred.reshape(-1,1)
 
-scaler = MinMaxScaler()
+scaler = StandardScaler()
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
 x_val = scaler.transform(x_val)
 x_pred = scaler.transform(x_pred)
 
-# print(x_train.shape) 
-# print(x_test.shape)
+print(x_train.shape) 
+print(x_test.shape)
 
-# x = x.reshape(-1, 4, 5)
-# x_train = x_train.reshape(-1, 4, 5)
-# x_test = x_test.reshape(-1, 4, 5)
-# x_val = x_val.reshape(-1, 4, 5)
-# x_pred = x_pred.reshape(-1, 4 ,5)
+x = x.reshape(-1, 4, 5)
+x_train = x_train.reshape(-1, 4, 5)
+x_test = x_test.reshape(-1, 4, 5)
+x_val = x_val.reshape(-1, 4, 5)
+x_pred = x_pred.reshape(-1, 4 ,5)
 
 
-# print(x_train.shape) 
-# print(x_test.shape)
-# print(x_pred.shape)
+print(x_train.shape) 
+print(x_test.shape)
+print(x_pred.shape)
 
 
 # np.save('./z_dacon-data/sun_data.npy',arr=([x,y,x_train,x_test,x_val,y_train,y_test,y_val]))
@@ -157,20 +158,20 @@ def quantile_loss(q, y, pred):
 
 for q in qunatile_list:
     model=Sequential()
-    model.add(Dense(1024,activation='relu', input_shape = (20,)))
-    model.add(Dropout(0.4))
+    model.add(GRU(512,activation='relu', input_shape = (4,5)))
+    model.add(Dropout(0.2))
     model.add(Dense(1024, activation='relu'))
-    model.add(Dropout(0.3))
+    model.add(Dropout(0.2))
     model.add(Dense(256, activation='relu'))
     model.add(Dropout(0.2))
     model.add(Dense(128, activation='relu'))
     model.add(Dense(64, activation='relu'))
     model.add(Dense(1))
 
-    es=EarlyStopping(monitor='val_loss', mode='auto', patience=50)              
+    es=EarlyStopping(monitor='val_loss', mode='auto', patience=50)
     rl=ReduceLROnPlateau(monitor='val_loss', mode='auto', patience=25, factor=0.5)
     cp=ModelCheckpoint(monitor='val_loss', mode='auto', save_best_only=True,
-                    filepath='./z_dacon-data/modelcheckpoint/dacon_day_2_{epoch:02d}-{val_loss:.4f}.hdf5')
+                    filepath='./dacon-data/modelcheckpoint/dacon_day_2_{epoch:02d}-{val_loss:.4f}.hdf5')
     model.compile(loss=lambda x_train, y_train:quantile_loss(q, x_train, y_train), optimizer='adam')
     hist=model.fit(x_train, y_train, validation_data=(x_val,y_val),epochs=1000, batch_size=16, callbacks=[es, cp, rl])
     loss=model.evaluate(x_test, y_test)
@@ -179,7 +180,7 @@ for q in qunatile_list:
     pred = np.round_(pred,3)
     y_pred=pd.DataFrame(pred)
 
-    file_path='./z_dacon-data/test_test/quantile_all_loss_' + str(q) + '.csv'
+    file_path='./dacon-data/test_test/quantile_all_loss_' + str(q) + '.csv'
     y_pred.to_csv(file_path)
 
 #2
@@ -203,7 +204,7 @@ for q in qunatile_list:
 # model.fit(x_train, y_train, epochs=1, batch_size = 16, validation_data = (x_val,y_val), verbose = 1, callbacks = [es,rd,cp])
 # model.save_weights("./z_dacon-data/sun__model.h5")
 
-model = load_model('./z_dacon-data/modelCheckPoint/sun__94-132.4603.hdf5')
+model = load_model('./dacon-data/modelCheckPoint/sun__94-132.4603.hdf5')
 
 
 4

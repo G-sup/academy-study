@@ -14,11 +14,11 @@ import seaborn as sns
 from tensorflow.python.keras import activations
 from tensorflow.python.keras.callbacks import ReduceLROnPlateau
 import tensorflow.keras.backend as K
-
 # 1
-df = pd.read_csv('./z_dacon-data/train/train.csv', index_col=[0,2], header=0) 
+df = pd.read_csv('./dacon-data/train/train.csv', index_col=[0,1,2], header=0) 
 
 df = df[['DHI','DNI','RH','T','TARGET']]
+
 
 # print(df.info()) # [52560 rows x 5 columns]
 # print(df.corr()) 
@@ -44,18 +44,14 @@ def split_x(D,x_row,y_cols):
 x, y1 = split_x(df,4,1)
 
 y1 = y1[:-48,:]
-
 x = x[:-48,:]
-df1 = df[ 3:-97,:]
-# print(df1)
-# df2 = df[-100:-97,:]
-# print(df2)
+
 # print('=========================================')
 # ]
 # print(y1[-15])
-# print(y1)
+print(y1.shape)
 # print('=========================================')
-# print(x[0])
+print(x.shape)
 # print(x[-15])
 # print('=========================================')
 
@@ -78,59 +74,16 @@ df1 = df[ 3:-97,:]
 
 # y = np.hstack((y1,y2))
 # print(y.shape)
-
 y = y1
-xydf = np.hstack((df1,y1))
-print(xydf.shape)        
 
-
-xydf = pd.DataFrame({'DHI': xydf[:, 0], 'DNI':xydf[:, 1], 'RH': xydf[:, 2], 'T': xydf[:, 3], 'TARGET': xydf[:, 4],'TARGET-Y': xydf[:, 5]})
-
-print(xydf.duplicated())          # 52560 (T=중복,F=중복아님)
-print('=====================================')
-print(xydf.duplicated().sum())    # 4737
-print('=====================================')
-print(xydf[xydf.duplicated()])      # 4737,5
-print(xydf.shape)
-xydf = xydf.drop_duplicates(keep='last')
-print(xydf.shape)
-xydf = xydf.values
-# x = xydf[ : , :-1]
-# y = xydf[ : ,-1]
-# print(x.shape)
-# print(y.shape)
-
-
-def split_x(D,x_row,y_cols):
-    x , y = [] , []
-    for i in range(len(D)):
-        x_end_number = i + x_row
-        y_end_number = x_end_number + y_cols -1
-        if y_end_number > len(D) :
-            break
-        tem_x = D[i : x_end_number,:-1]
-        tem_y = D[x_end_number -1 :y_end_number, -1] # 뒤 숫자에 따라 y가 변한다
-        x.append(tem_x)
-        y.append(tem_y)
-    return np.array(x),np.array(y)
-    
-x, y = split_x(xydf,4,1)
-
-print(x)
-print(x.shape)
-print('----------------')
-print(y)
-print(y.shape)
-
-
-
-df2 = pd.read_csv('./z_dacon-data/x_pred_all7.csv', header=0) 
+df2 = pd.read_csv('./dacon-data/x_pred_all.csv', header=0) 
 df2 = df2[['DHI','DNI','RH','T','TARGET']]
-df2 = df2.dropna(axis=0).values
-print(df2)
-print(df2.shape)
-x_pred = df2.reshape(7776, 4, 5)
 
+df2 = df2.dropna(axis=0).values
+
+print(df2.shape)
+
+x_pred = df2.reshape(7776, 4, 5)
 
 # def split_x(D,size,y_cols):
 #     x1 , y1 = [] , []
@@ -147,27 +100,28 @@ x_pred = df2.reshape(7776, 4, 5)
     
 # x1, y1 = split_x(df2,4,1)
 
-# x_pred = x1[-97:-1,:]
+# # x_pred = x1[-97:-1,:]
 # x_pred = x1
 
-print('=========================================')
+# print('=========================================')
 
-print(x_pred[17])
-print(x_pred.shape)
+# print(x_pred[17])
+# print(x_pred.shape)
 
 
 # x_pred = np.percentile(x_pred,[10,20,30,40,50,60,70,80,90],0)
 print(x_pred)
 print(x_pred.shape)
 
+
 x_train, x_test, y_train, y_test = train_test_split(x,y, train_size = 0.8, random_state=104)
 x_train, x_val, y_train, y_val = train_test_split(x_train,y_train,train_size = 0.8, random_state=104)
 
-x = x.reshape(-1, 1)
-x_train = x_train.reshape(-1, 1)
-x_test = x_test.reshape(-1, 1)
-x_val = x_val.reshape(-1,1)
-x_pred = x_pred.reshape(-1,1)
+x = x.reshape(-1, 20)
+x_train = x_train.reshape(-1, 20)
+x_test = x_test.reshape(-1, 20)
+x_val = x_val.reshape(-1,20)
+x_pred = x_pred.reshape(-1,20)
 
 scaler = MinMaxScaler()
 scaler.fit(x_train)
@@ -176,19 +130,19 @@ x_test = scaler.transform(x_test)
 x_val = scaler.transform(x_val)
 x_pred = scaler.transform(x_pred)
 
-print(x_train.shape) 
-print(x_test.shape)
+# print(x_train.shape) 
+# print(x_test.shape)
 
-x = x.reshape(-1, 4, 5)
-x_train = x_train.reshape(-1, 4, 5)
-x_test = x_test.reshape(-1, 4, 5)
-x_val = x_val.reshape(-1, 4, 5)
-x_pred = x_pred.reshape(-1, 4 ,5)
+# x = x.reshape(-1, 4, 5)
+# x_train = x_train.reshape(-1, 4, 5)
+# x_test = x_test.reshape(-1, 4, 5)
+# x_val = x_val.reshape(-1, 4, 5)
+# x_pred = x_pred.reshape(-1, 4 ,5)
 
 
-print(x_train.shape) 
-print(x_test.shape)
-print(x_pred.shape)
+# print(x_train.shape) 
+# print(x_test.shape)
+# print(x_pred.shape)
 
 
 # np.save('./z_dacon-data/sun_data.npy',arr=([x,y,x_train,x_test,x_val,y_train,y_test,y_val]))
@@ -201,32 +155,31 @@ def quantile_loss(q, y, pred):
     err=(y-pred)
     return K.mean(K.maximum(q*err, (q-1)*err), axis=-1)
 
-
 for q in qunatile_list:
     model=Sequential()
-    model.add(GRU(64,activation='relu',return_sequences=True, input_shape = (4,5)))
-    model.add(Dropout(0.2))
-    model.add(GRU(64, activation='relu'))
+    model.add(Dense(1024,activation='relu', input_shape = (20,)))
+    model.add(Dropout(0.4))
+    model.add(Dense(1024, activation='relu'))
     model.add(Dropout(0.3))
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(256, activation='relu'))
     model.add(Dropout(0.2))
     model.add(Dense(128, activation='relu'))
     model.add(Dense(64, activation='relu'))
     model.add(Dense(1))
 
-    es=EarlyStopping(monitor='val_loss', mode='auto', patience=50)
+    es=EarlyStopping(monitor='val_loss', mode='auto', patience=50)              
     rl=ReduceLROnPlateau(monitor='val_loss', mode='auto', patience=25, factor=0.5)
     cp=ModelCheckpoint(monitor='val_loss', mode='auto', save_best_only=True,
                     filepath='./z_dacon-data/modelcheckpoint/dacon_day_2_{epoch:02d}-{val_loss:.4f}.hdf5')
     model.compile(loss=lambda x_train, y_train:quantile_loss(q, x_train, y_train), optimizer='adam')
-    hist=model.fit(x_train, y_train, validation_data=(x_val,y_val),epochs=1000, batch_size=64, callbacks=[es, cp, rl])
+    hist=model.fit(x_train, y_train, validation_data=(x_val,y_val),epochs=1000, batch_size=16, callbacks=[es, cp, rl])
     loss=model.evaluate(x_test, y_test)
     pred=model.predict(x_pred)
     pred = np.where(pred < 0.4, 0, pred)
     pred = np.round_(pred,3)
     y_pred=pd.DataFrame(pred)
 
-    file_path='./z_dacon-data/test_test/quantile_all_loss_5cols' + str(q) + '.csv'
+    file_path='./dacon-data/test_test/quantile_all_loss_' + str(q) + '.csv'
     y_pred.to_csv(file_path)
 
 #2
@@ -250,15 +203,15 @@ for q in qunatile_list:
 # model.fit(x_train, y_train, epochs=1, batch_size = 16, validation_data = (x_val,y_val), verbose = 1, callbacks = [es,rd,cp])
 # model.save_weights("./z_dacon-data/sun__model.h5")
 
-# model = load_model('./z_dacon-data/modelCheckPoint/sun__94-132.4603.hdf5')
+model = load_model('./dacon-data/modelCheckPoint/sun__94-132.4603.hdf5')
 
 
-# 4
-# loss = model.evaluate(x_test,y_test,batch_size=16)
+4
+loss = model.evaluate(x_test,y_test,batch_size=16)
 
-# print(loss)
-# y_pred = model.predict(x_pred)
+print(loss)
+y_pred = model.predict(x_pred)
 
-# y_pred = np.where(y_pred < 0.5, 0, y_pred)
+y_pred = np.where(y_pred < 0.5, 0, y_pred)
 
-# print(np.round_(y_pred,2))
+print(np.round_(y_pred,2))

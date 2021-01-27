@@ -15,7 +15,7 @@ from tensorflow.python.keras import activations
 from tensorflow.python.keras.callbacks import ReduceLROnPlateau
 import tensorflow.keras.backend as K
 
-df = pd.read_csv('./z_dacon-data/train/train.csv', index_col=[0,1,2], header=0) 
+df = pd.read_csv('./dacon-data/train/train.csv', index_col=[0,1,2], header=0) 
 
 df = df[['TARGET']]
 
