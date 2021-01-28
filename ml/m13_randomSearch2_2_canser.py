@@ -23,7 +23,6 @@ y = dataset.target
 
 x_train , x_test,y_train ,y_test = train_test_split( x, y, train_size = 0.8, random_state=104)
 
-start_time = datetime.datetime.now()
 
 
 KFold = KFold(n_splits=5,shuffle=True) # (shuffle=False : 순차적)
@@ -46,7 +45,9 @@ model = RandomizedSearchCV(RandomForestClassifier(), Parameters, cv = KFold )
 
 #3 훈련
 
+start_time = datetime.datetime.now()
 model.fit(x_train, y_train)
+end_time = datetime.datetime.now()
 
 #4 평가 예측
 
@@ -57,7 +58,6 @@ print("최종정답률 : ",accuracy_score(y_test,y_pred))
 
 print("최종정답률 : ", model.score(x_test,y_test)) # RandomizedSearchCV 가 모델자체가 된다
 
-end_time = datetime.datetime.now()
 print('걸린시간 : ', end_time - start_time)
 
 

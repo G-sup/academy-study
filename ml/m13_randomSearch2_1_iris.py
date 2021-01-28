@@ -15,7 +15,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # 1 데이터
-start_time = datetime.datetime.now()
 
 dataset = load_iris()
 x = dataset.data
@@ -43,7 +42,9 @@ model = RandomizedSearchCV(RandomForestClassifier(), Parameters, cv = KFold  )
 
 #3 훈련
 
+start_time = datetime.datetime.now()
 model.fit(x_train, y_train)
+end_time = datetime.datetime.now()
 
 #4 평가 예측
 
@@ -54,7 +55,6 @@ print("최종정답률 : ",accuracy_score(y_test,y_pred))
 
 print("최종정답률 : ", model.score(x_test,y_test)) # RandomizedSearchCV 가 모델자체가 된다
 
-end_time = datetime.datetime.now()
 
 print('걸린시간 : ', end_time - start_time)
 

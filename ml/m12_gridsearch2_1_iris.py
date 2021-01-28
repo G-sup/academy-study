@@ -15,7 +15,6 @@ import datetime
 warnings.filterwarnings('ignore')
 
 # 1 데이터
-start_time = datetime.datetime.now()
 
 dataset = load_iris()
 x = dataset.data
@@ -43,9 +42,10 @@ model = GridSearchCV(RandomForestClassifier(), Parameters, cv = KFold  )
 # GridSearchCV 뒤에 모델(SVC)을  파라미터에 (감싸서) 맞춰서 돌린다 (파라미터 18 * kfold 횟수 5) 즉 총 90번이 돌아갔다.
 
 #3 훈련
+start_time = datetime.datetime.now()
 
 model.fit(x_train, y_train)
-
+end_time = datetime.datetime.now()
 #4 평가 예측
 
 print('최적의 매개변수 : ', model.best_estimator_) # model.best_estimator_ : 어떤것이 가장 좋은것(매개변수)인지 나온다 
@@ -55,7 +55,7 @@ print("최종정답률 : ",accuracy_score(y_test,y_pred))
 
 print("최종정답률 : ", model.score(x_test,y_test)) # GridSearchCV 가 모델자체가 된다
 
-end_time = datetime.datetime.now()
+
 
 print('걸린시간 : ', end_time - start_time)
 # 최적의 매개변수 :  RandomForestClassifier(max_depth=10, n_jobs=-1)

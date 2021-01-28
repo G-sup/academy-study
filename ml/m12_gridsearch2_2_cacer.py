@@ -16,7 +16,6 @@ from sklearn.ensemble import RandomForestClassifier,RandomForestRegressor
 from sklearn.linear_model import LogisticRegression
 import datetime
 
-start_time = datetime.datetime.now()
 
 dataset = load_breast_cancer()
 x = dataset.data
@@ -43,8 +42,10 @@ model = GridSearchCV(RandomForestClassifier(), Parameters, cv = KFold )
 
 
 #3 훈련
+start_time = datetime.datetime.now()
 
 model.fit(x_train, y_train)
+end_time = datetime.datetime.now()
 
 #4 평가 예측
 
@@ -54,7 +55,6 @@ y_pred = model.predict(x_test)
 print("최종정답률 : ",accuracy_score(y_test,y_pred))
 
 print("최종정답률 : ", model.score(x_test,y_test)) # GridSearchCV 가 모델자체가 된다
-end_time = datetime.datetime.now()
 
 print('걸린시간 : ', end_time - start_time)
 # 최적의 매개변수 :  RandomForestClassifier(max_depth=10, n_estimators=200, n_jobs=-1)
