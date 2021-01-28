@@ -27,16 +27,24 @@ KFold = KFold(n_splits=5,shuffle=True) # (shuffle=False : 순차적)
 
 #2 모델 구성
 
-model = LinearSVC()
+models = [LinearSVC, SVC, KNeighborsClassifier, DecisionTreeClassifier, RandomForestClassifier]
+
+for algorithm in models :  
+    model = algorithm()
+    scores = cross_val_score(model, x_train, y_train, cv=KFold) # accuracy_score
+    print(algorithm)
+    print('scores : ', scores)
+
+# model = LinearSVC()
 # model = SVC()
 # model = KNeighborsClassifier()
 # model = DecisionTreeClassifier()
 # model = RandomForestClassifier()
 # model = LogisticRegression()
 
-scores = cross_val_score(model, x_train, y_train, cv=KFold)
+# scores = cross_val_score(model, x_train, y_train, cv=KFold)
 
-print('scores : ',scores)
+# print('scores : ',scores)
 
 # #3 훈련
 # model.fit(x_train, y_train)

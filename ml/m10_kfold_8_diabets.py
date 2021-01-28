@@ -28,14 +28,22 @@ KFold = KFold(n_splits=5,shuffle=True) # (shuffle=False : 순차적)
 
 #2 모델 구성
 
-model = LinearRegression()
+models = [LinearRegression, KNeighborsRegressor, DecisionTreeRegressor, RandomForestRegressor]
+
+for algorithm in models :  
+    model = algorithm()
+    scores = cross_val_score(model, x_train, y_train, cv=KFold) # r2_score
+    print(algorithm)
+    print('scores : ', scores)
+
+# model = LinearRegression()
 # model = KNeighborsRegressor()
 # model = DecisionTreeRegressor()
 # model = RandomForestRegressor()
 
-scores = cross_val_score(model, x_train, y_train, cv=KFold)
+# scores = cross_val_score(model, x_train, y_train, cv=KFold)
 
-print('scores : ',scores)
+# print('scores : ',scores)
 
 # #3 훈련
 
