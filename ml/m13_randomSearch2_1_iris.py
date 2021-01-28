@@ -37,7 +37,6 @@ Parameters = [
 # model = SVC()
 
 model = RandomizedSearchCV(RandomForestClassifier(), Parameters, cv = KFold  ) 
-# RandomizedSearchCV 뒤에 모델(SVC)을  파라미터에 (감싸서) 맞춰서 돌린다 (파라미터 18 * kfold 횟수 5) 즉 총 90번이 돌아갔다.
 
 
 #3 훈련
