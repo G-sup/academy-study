@@ -63,27 +63,85 @@ model.add(Dense(10,activation='softmax'))
 model.summary()
 
 # Model Check Point date_time
+
+#===================================================================================================
 import datetime
 
-date_now = datetime.datetime.now() # 체크포인트 내로 now 를 넣어서 수정
-print(date_now)
-date_time = date_now.strftime("%m%d_%H%M")
-print(date_time)
+# date_now = datetime.datetime.now() # 체크포인트 내로 now 를 넣어서 수정
+# print(date_now)
+# date_time = date_now.strftime("%m%d_%H%M")
+# print(date_time)
 
-from tensorflow.keras.callbacks import ModelCheckpoint # callbacks 안에 넣어준다
+# from tensorflow.keras.callbacks import ModelCheckpoint # callbacks 안에 넣어준다
 
-filepath = '../data/modelcheckpoint/'
-filename = '_{epoch:02d}-{val_loss:.4f}.hdf5'
-modelpath = ''.join([filepath,'k45_',date_time,filename])
-print(modelpath)
+# filepath = '../data/modelcheckpoint/'
+# filename = '_{epoch:02d}-{val_loss:.4f}.hdf5'
+# modelpath = ''.join([filepath,'k45_',date_time,filename])
+# print(modelpath)
+
+# class SaveEveryEpoch(Callback):
+#     def __init__(self, model_name, *args, **kwargs):
+#         self.model_checkpoints_with_loss = []
+#         self.model_name = model_name
+#         super().__init__(*args, **kwargs)
+
+#     def on_epoch_end(self, epoch, logs):
+#         # I suppose here it's a Functional model
+#         print(logs['acc'])
+#         path_to_checkpoint = (
+#             str(datetime.datetime.now()).split(' ')[0] 
+#             + f'_{self.model_name}'
+#             + f'_{epoch:02d}.hdf5'
+#         )
+#         self.model.save(path_to_checkpoint)
+#         self.model_checkpoints_with_loss.append((logs['loss'], path_to_checkpoint))
+
+# def date_now():
+#     date_time = str(datetime.datetime.now()).split(' ')
+#     filepath = '../data/modelcheckpoint/'
+#     filename = '_{epoch:02d}-{val_loss:.4f}.hdf5'
+#     modelpath = ''.join([filepath,'k45_',date_time,filename])
+#     return modelpath
+
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+filepath='../data/modelcheckpoint/'
+filename='_{epoch:02d}-{val_loss:.4f}.hdf5'
+modelpath = "".join([filepath, "k45_", '{timer}', filename])
+
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.python.util.tf_export import keras_export
+from tensorflow.python.distribute import distributed_file_utils
+@keras_export('keras.callbacks.ModelCheckpoint')
+class MyModelCheckpoint(tf.keras.callbacks.ModelCheckpoint):
+    def _get_file_path(self, epoch, logs):
+        """Returns the file path for checkpoint."""
+        # pylint: disable=protected-access
+        try:
+        # `filepath` may contain placeholders such as `{epoch:02d}` and
+        # `{mape:.2f}`. A mismatch between logged metrics and the path's
+        # placeholders can cause formatting to fail.
+            file_path = self.filepath.format(epoch=epoch + 1, timer=datetime.datetime.now().strftime('%m%d_%H%M'), **logs)
+        except KeyError as e:
+            raise KeyError('Failed to format this callback filepath: "{}". '
+                        'Reason: {}'.format(self.filepath, e))
+        self._write_filepath = distributed_file_utils.write_filepath(
+            file_path, self.model.distribute_strategy)
+        return self._write_filepath
+
+mc = MyModelCheckpoint(filepath=modelpath, monitor='val_loss', save_best_only=True, mode='auto')
+
+
+#===================================================================================================
 
 #3 
 
 # from tensorflow.keras.callbacks import ModelCheckpoint # callbacks 안에 넣어준다
 # modelpath = '../Data/modelCheckPoint/k45_mnist_{epoch:02d}-{val_loss:.4f}.hdf5' # 파일명 : 모델명 에포-발리데이션
-mc = ModelCheckpoint(filepath=modelpath,monitor='val_loss',save_best_only=True,mode='auto')
+# mc = ModelCheckpoint(filepath=date_now(),monitor='val_loss',save_best_only=True,mode='auto')
 # filepath 그지점에 W 값이 들어간다
 
+# mc = ModelCheckpoint(filepath=modelpath, monitor='val_loss', save_best_only=True, mode='auto')
 model.compile(loss='categorical_crossentropy',optimizer='adam',metrics='acc')
 early_stopping = EarlyStopping(monitor='val_loss',patience=5,mode='auto')
 hist = model.fit(x_train, y_train, epochs=50,batch_size=16,validation_split=0.2,verbose=1,callbacks=[early_stopping,mc])
