@@ -35,9 +35,10 @@ Parameters = [
 # model = SVC()
 
 # model = GridSearchCV(SVC(), Parameters, cv = KFold  ) 
-model = RandomizedSearchCV(SVC(), Parameters, cv = KFold  ) 
+model = RandomizedSearchCV(SVC(), Parameters, cv = KFold  ,verbose=1) 
 
-# GridSearchCV 뒤에 모델(SVC)을  파라미터에 (감싸서) 맞춰서 돌린다 (파라미터 18 * kfold 횟수 5) 즉 총 90번이 돌아갔다.
+# 뒤에 모델(SVC)을  파라미터에 (감싸서) 맞춰서 돌린다 (Fitting 5 folds for each of 10 candidates, totalling 50 fits) 즉 총 50번이 돌아갔다.
+# default 10
 
 
 #3 훈련
