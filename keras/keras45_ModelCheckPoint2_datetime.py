@@ -63,21 +63,23 @@ model.add(Dense(10,activation='softmax'))
 model.summary()
 
 # Model Check Point date_time
+import datetime
 
 #===================================================================================================
-import datetime
+# from tensorflow.keras.callbacks import ModelCheckpoint # callbacks 안에 넣어준다
 
 # date_now = datetime.datetime.now() # 체크포인트 내로 now 를 넣어서 수정
 # print(date_now)
 # date_time = date_now.strftime("%m%d_%H%M")
 # print(date_time)
 
-# from tensorflow.keras.callbacks import ModelCheckpoint # callbacks 안에 넣어준다
 
 # filepath = '../data/modelcheckpoint/'
 # filename = '_{epoch:02d}-{val_loss:.4f}.hdf5'
 # modelpath = ''.join([filepath,'k45_',date_time,filename])
 # print(modelpath)
+
+#===================================================================================================
 
 # class SaveEveryEpoch(Callback):
 #     def __init__(self, model_name, *args, **kwargs):
@@ -102,6 +104,7 @@ import datetime
 #     filename = '_{epoch:02d}-{val_loss:.4f}.hdf5'
 #     modelpath = ''.join([filepath,'k45_',date_time,filename])
 #     return modelpath
+#===================================================================================================
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 filepath='../data/modelcheckpoint/'
