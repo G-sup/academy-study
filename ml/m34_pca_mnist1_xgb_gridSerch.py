@@ -40,7 +40,7 @@ parameters = [
 
 #2 모델 구성
 
-model = RandomizedSearchCV(XGBClassifier(eval_metric='mlogloss'), parameters, cv = KFold , verbose=True, eval_set = [(x_train, y_train),(x_test, y_test)]) # mlogloss = loss
+model = RandomizedSearchCV(XGBClassifier(eval_metric='mlogloss', eval_set = [(x_train, y_train),(x_test, y_test)]), parameters, cv = KFold , verbose=True) # mlogloss = loss
 
 score = cross_val_score(model, x_train,y_train,cv= KFold)
 

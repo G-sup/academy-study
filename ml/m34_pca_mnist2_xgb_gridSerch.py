@@ -37,7 +37,7 @@ parameters = [
 
 #2 모델 구성
 
-model = GridSearchCV(XGBClassifier(eval_metric='mlogloss'), parameters, cv = KFold  , verbose=1) 
+model = GridSearchCV(XGBClassifier(eval_metric='mlogloss', eval_set=[(x_train,y_train),(x_test,y_test)]), parameters, cv = KFold  , verbose=1) 
 
 score = cross_val_score(model, x_train,y_train,cv= KFold)
 
