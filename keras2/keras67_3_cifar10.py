@@ -4,41 +4,42 @@ from tensorflow.keras.layers import Dense , Conv2D, Flatten, Dropout, MaxPooling
 from tensorflow.keras.datasets import cifar10
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
-
-(x_train, y_train), (x_test,  y_test) = cifar10.load_data()
-
-train_datagen = ImageDataGenerator(rescale=1./255, horizontal_flip=True,vertical_flip=True,width_shift_range=0.1,height_shift_range=0.1,rotation_range=5,
-    zoom_range=1.2,shear_range=0.7,fill_mode='nearest')
-
-test_datagen = ImageDataGenerator(rescale=1./255)
-
-# train_generator
-xy_train = train_datagen.flow(x_train, y_train,batch_size=500)
-# Found 160 images belonging to 2 classes.
-
-# test_generator
-xy_test = test_datagen.flow(x_test,  y_test,batch_size=500)
-# Found 120 images belonging to 2 classes.
+from sklearn.model_selection import train_test_split
 
 
+(x_train,y_train),(x_test,y_test) = cifar10.load_data()
+
+x_train,x_val,y_train,y_val = train_test_split(x_train,y_train,train_size = 0.8)
+
+train_datagen = ImageDataGenerator(rescale = 1/255., width_shift_range=0.2, height_shift_range=0.2)
+test_datagen = ImageDataGenerator(rescale = 1/255.)
+
+batch = 25
+xy_train = train_datagen.flow(x_train,y_train,batch_size = batch)
+xy_val = test_datagen.flow(x_val,y_val,batch_size = batch)
+xy_test = test_datagen.flow(x_test,y_test,batch_size = batch)
+
+#2. 모델
 model = Sequential()
-model.add(Conv2D(32,(3,3),padding='same',input_shape=(32,32,3),activation='relu'))
-model.add(MaxPooling2D(pool_size=4))
-model.add(Conv2D(64,(3,3),padding='same',activation='relu'))
-model.add(MaxPooling2D(pool_size=2))
-model.add(Conv2D(64,(3,3),padding='same',activation='relu'))
-model.add(MaxPooling2D(pool_size=2))
+model.add(Conv2D(128, 3, padding = 'same', activation= 'relu', input_shape = (32,32,3)))
+model.add(Conv2D(64, 3, padding = 'same', activation = 'relu'))
+model.add(Conv2D(64, 5, padding = 'same', activation = 'relu'))
+model.add(MaxPooling2D(3))
 model.add(Flatten())
-model.add(Dense(64,activation='relu'))
-model.add(Dense(10,activation='softmax'))
-model.summary()
+model.add(Dense(64, activation = 'relu'))
+model.add(Dense(32, activation = 'relu'))
+model.add(Dense(16, activation = 'relu'))
+model.add(Dense(10, activation = 'softmax'))
 
-model.compile(loss='categorical_crossentropy',optimizer='adam',metrics='acc')
-lr = ReduceLROnPlateau(monitor='val_loss',patience=20,factor=0.5,verbose=1) # factor = 0.5 : RL를 50%로 줄이겠다
-es = EarlyStopping(monitor='val_loss',patience=40,mode='auto')
-hist = model.fit_generator(xy_train, steps_per_epoch=100 ,epochs=1000,validation_data=xy_test,validation_steps=20,callbacks=[es,lr])
+#3. 컴파일 훈련
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+es = EarlyStopping(patience = 10)
+lr = ReduceLROnPlateau(factor = 0.25, patience= 5)
+model.compile(loss = 'sparse_categorical_crossentropy', optimizer='adam', metrics = ['acc'])
+hist = model.fit_generator(xy_train, validation_data= xy_val, epochs = 1000, steps_per_epoch = 40000/batch,
+         validation_steps=10000/batch, callbacks = [es,lr])
+        
+#4. 평가
+# print('accuracy : ', model.evaluate(x_test, y_test)[1])
 
-acc = hist.history['acc']
-val_acc = hist.history['val_acc']
-loss = hist.history['acc']
-val_loss = hist.history['val_acc']
+# # accuracy :  0.42980000376701355
