@@ -14,24 +14,32 @@ from sklearn.model_selection import train_test_split
 # test_datagen = ImageDataGenerator(rescale=1./255,validation_split=0.2)
 # pred_datagen = ImageDataGenerator(rescale=1./255)
 
-# # image_generator = ImageDataGenerator(rescale=1/255, validation_split=0.2)    
+# image_generator = ImageDataGenerator(rescale=1/255, validation_split=0.2)   
+ 
+image_generator = ImageDataGenerator()
 
-# x_train = pred_datagen.flow_from_directory('C:/data/dacon/dacon3/train',seed=104,target_size=(255, 255),batch_size=50000,color_mode='grayscale')#,subset="training")
-# x_pred = pred_datagen.flow_from_directory('C:/data/dacon/dacon3/predict',seed=104,target_size=(255, 255),batch_size=5000,color_mode='grayscale')
+x_train = image_generator.flow_from_directory('C:/data/dacon/dacon3/train',seed=104,target_size=(256, 256),batch_size=50000,color_mode='grayscale')#,subset="training")
+x_pred = image_generator.flow_from_directory('C:/data/dacon/dacon3/predict',seed=104,target_size=(256, 256),batch_size=5000,color_mode='grayscale')
 
-# np.save('C:/data/image/brain/npy/dacon_train_x_255.npy', arr=x_train[0][0])
-# np.save('C:/data/image/brain/npy/dacon_pred_x_255.npy', arr=x_pred[0][0])
+np.save('C:/data/image/brain/npy/dacon_train_x_256.npy', arr=x_train[0][0])
+np.save('C:/data/image/brain/npy/dacon_pred_x_256.npy', arr=x_pred[0][0])
 
 x_train = np.load('C:/data/image/brain/npy/dacon_train_x_255.npy')
 x_pred = np.load('C:/data/image/brain/npy/dacon_pred_x_255.npy')
 
+# x_train = x_train.reshape(x_train.shape[0], 256, 256, 1).astype('float32')
+# x_train = (x_train - 127.5) / 127.5 
+
+
 y_train = pd.read_csv('C:/data/dacon/dacon3/dirty_mnist_2nd_answer.csv', index_col=0, header=0)
 pred = pd.read_csv('C:/data/dacon/dacon3/sample_submission.csv')
 
-# print(y_train)
+print(x_train[0])
+print(y_train[0])
+
 x_train,x_test,y_train,y_test = train_test_split (x_train,y_train,train_size=0.8, random_state=104)
 
-
+'''
 
 model = Sequential()
 model.add(Conv2D(32,kernel_size=(3,3), input_shape=(255,255,1), strides=1,padding='same'))
@@ -84,3 +92,5 @@ sample_submission = pd.read_csv('C:/data/dacon/dacon3/sample_submission.csv')
 sample_submission.iloc[:,1:] = sub
 sample_submission.to_csv("C:/data/dacon/dacon3/Dacon_3.csv", index = False)
 sample_submission
+
+'''
