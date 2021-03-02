@@ -58,15 +58,29 @@ val_loss_min = []
 result = 0
 nth = 0
 
-for train_index, valid_index in skf.split(train2,train['digit']) :
+y = train['letter']
+y1=np.array(y)
+
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+encoder = OneHotEncoder()
+print(y.shape)
+y = encoder.fit(y1.reshape(-1,1)).toarray()
+
+for train_index, valid_index in skf.split(train2,y) :
     
     mc = ModelCheckpoint('best_vision.h5',save_best_only=True, verbose=1)
+    # y = encoder.fit_transform(y1.reshape(-1,1)).toarray()
     
     x_train = train2[train_index]
     x_valid = train2[valid_index]    
-    y_train = train['digit'][train_index]
-    y_valid = train['digit'][valid_index]
-    
+    y_train = y[train_index]
+    y_valid = y[valid_index]
+
+    # y_train = np.array(y_train)
+    # y_train = encoder.transform(y_train.reshape(-1,1)).toarray()
+    # y_valid = np.array(y_valid)
+    # y_valid = encoder.transform(y_valid.reshape(-1,1)).toarray()   
+
     train_generator = idg.flow(x_train,y_train,batch_size=8)
     valid_generator = idg2.flow(x_valid,y_valid)
     test_generator = idg2.flow(test2,shuffle=False)
@@ -96,7 +110,7 @@ for train_index, valid_index in skf.split(train2,train['digit']) :
     model.add(Dropout(0.2))
     model.add(Dense(64,activation='tanh'))
     model.add(BatchNormalization())
-    model.add(Dense(10,activation='softmax'))
+    model.add(Dense(26,activation='softmax'))
     
     model.compile(loss='sparse_categorical_crossentropy', optimizer=Adam(lr=0.002,epsilon=None),metrics=['acc'])
     
