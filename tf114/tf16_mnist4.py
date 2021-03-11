@@ -67,6 +67,8 @@ optimizer = tf.train.AdamOptimizer(learning_rate=0.00008).minimize(loss)
 
 trianing_epochs = 15
 batch_size = 100
+#  배치사이즈를 높게 잡는 이유는 컴퓨터의 성능이 딸리기 떄문이다 
+
 total_batch = int(len(x_train)/batch_size) #  60000/ 50 = 1200, 60000/ 100 = 600 , 60000/ 200 = 300
 
 sess = tf.Session()
