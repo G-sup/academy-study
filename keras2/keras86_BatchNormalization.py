@@ -73,6 +73,11 @@ print(loss[1])
 #                      l1 = L1 norn(normalization) 가중치의 절댓값에 비례하는 비용이 추가됨(가중치의 L1 norm)
 #                      l2 = L2 regularization(=weight decay) : 가중치의 제곱에 비례하는 비용이 추가됨(가중치의 L2 norm)
 
+#       L1 Loss	              |       L2 Loss
+#   Robust	                  |   Not very robust
+#   Unstable solution	      |   Stable solution
+#   Possibly multiple solution|   Always one solution
+
 # BatchNormalization = 미니배치를 정규화
 
 # Dropout = 노드의 개수를 줄이는것 
