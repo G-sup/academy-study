@@ -5,7 +5,7 @@ import pandas as pd
 from tensorflow.keras.layers import Dense,Flatten,Conv2D,MaxPooling2D,BatchNormalization, Embedding, Activation,ReLU
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
-from tensorflow.keras.applications import VGG19
+from tensorflow.keras.applications import VGG19, VGG16
 
 # train_datagen = ImageDataGenerator(rescale=1./255, width_shift_range=0.1,height_shift_range=0.1,rotation_range=5,
 #     zoom_range=1.2,shear_range=0.7,fill_mode='nearest')
@@ -34,7 +34,7 @@ print(x_train.shape, y_train.shape)
 print(x_test.shape, y_test.shape)
 print(x_pred.shape)
 
-vgg19 = VGG19(weights='imagenet', include_top=False, input_shape=(128, 128, 3))
+vgg19 = VGG16(weights='imagenet', include_top=False, input_shape=(128, 128, 3))
 
 print(vgg19.weights)
 
