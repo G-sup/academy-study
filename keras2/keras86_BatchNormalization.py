@@ -62,15 +62,16 @@ print(loss[1])
 
 # 일반화(regularizer), 정규화(normalization)= 값을 한정시킨다. 
 
-# ====초기값 설정은 케라스 레이어의 초기 난수 가중치를 설정하는 방식=====
+# ====초기값 설정은 케라스 레이어의 초기 난수 가중치를 설정하는 방식을 규정=====
 # kernel_initializer = weight initializer(가중치 초기화) 
 # kernel_initializer = (relu 계열 = he 계열) 
 #                      (sigmoid, tanh = Xavier 계열)
 
-# bias_initializer = 
+# bias_initializer  
 # ==================================================================
 # kernel_regularizer = 일반화
-#                      l1 = L1 norn(normalization)
+#                      l1 = L1 norn(normalization) 가중치의 절댓값에 비례하는 비용이 추가됨(가중치의 L1 norm)
+#                      l2 = L2 regularization(=weight decay) : 가중치의 제곱에 비례하는 비용이 추가됨(가중치의 L2 norm)
 
 # BatchNormalization = 미니배치를 정규화
 
