@@ -59,13 +59,13 @@ def solution_model():
         # Note the input shape specified on your first layer must be (300,300,3)
         # Your Code here
 
-        tf.keras.layers.Conv2D(128,3,input_shape = (300,300,3)),
+        tf.keras.layers.Conv2D(64,3,input_shape = (300,300,3)),
         tf.keras.layers.MaxPooling2D(2),
         tf.keras.layers.Dropout(0.4),
-        tf.keras.layers.Conv2D(64,3),
+        tf.keras.layers.Conv2D(128,3),
         tf.keras.layers.MaxPooling2D(2),
         tf.keras.layers.Dropout(0.4),
-        tf.keras.layers.Conv2D(64,3),
+        tf.keras.layers.Conv2D(256,3),
         tf.keras.layers.MaxPooling2D(2),
         tf.keras.layers.Dropout(0.4),
         tf.keras.layers.Conv2D(32,3),
