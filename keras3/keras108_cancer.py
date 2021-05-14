@@ -23,7 +23,7 @@ model = ak.StructuredDataClassifier(
     metrics=['accuracy']
 )
 
-model.fit(x_train,y_train, epochs = 10, validation_split = 0.2)
+model.fit(x_train,y_train, epochs = 50, validation_split = 0.2)
 
 results = model.evaluate(x_test, y_test)
 print(results)
