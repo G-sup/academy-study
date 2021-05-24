@@ -20,13 +20,13 @@ from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, LSTM, Input
 
 inputs = Input(shape=(3,1))
-dense1 = (LSTM(356, activation='relu'))(inputs)
-dense1 = (Dense(128))(dense1)
-dense1 = (Dense(128))(dense1)
-dense1 = (Dense(64))(dense1)
-dense1 = (Dense(64))(dense1)
-dense1 = (Dense(64))(dense1)
-outputs = (Dense(1))(dense1)
+dense1 = LSTM(356, activation='relu')(inputs)
+dense1 = Dense(128)(dense1)
+dense1 = Dense(128)(dense1)
+dense1 = Dense(64)(dense1)
+dense1 = Dense(64)(dense1)
+dense1 = Dense(640)(dense1)
+outputs = Dense(1)(dense1)
 model = Model(inputs = inputs, outputs= outputs)
 # model.summary()
 
