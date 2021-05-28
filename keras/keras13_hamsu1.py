@@ -33,7 +33,7 @@ from tensorflow.keras.layers import Dense, Input
 input1 = Input(shape=(5,))
 dense1 = Dense(5, activation='relu')(input1) # input 레이어를 레이어의 꽁지에 둔다
 dense2 = Dense(3)(dense1) # 다음레이어의 인풋이 dence1 이니까 뒤에 둔다
-dense3 = Dense(4)(dense2) 
+dense3 = Dense(4,kernel_initializer='VarianceScaling')(dense2) 
 outputs = Dense(2)(dense3) # output까지 나오게 구성
 model = Model(inputs = input1, outputs = outputs) # 함수형일때는 마지막에 모델형 선언
 model.summary()
